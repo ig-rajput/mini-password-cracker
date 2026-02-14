@@ -37,9 +37,8 @@ How To Run
 Basic syntax:
 
 python cracker.py -t <hash> -ht <hash_type> -w <wordlist>
-Example:
-Copy code
 
+Example
 python cracker.py -t 21232f297a57a5a743894a0e4a801fc3 -ht md5 -w wordList.txt
 ___________________________________________________________________________
 
