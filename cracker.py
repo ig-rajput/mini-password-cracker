@@ -1,76 +1,98 @@
+# Mini Password Cracker
+# Built for learning dictionary attacks using Python
+
+# Future improvement:
+# add multithreading later
+
 import hashlib
 import argparse
 import time
-import sys
 import os
 
 
-def crack_password(target_hash, hash_type, wordlist, salt=None):
-    attempts = 0
-    found = False
+def crack_password(target_hash, hash_type, wordlist):
 
+    attempts = 0
     start_time = time.time()
 
-    try:
-        with open(wordlist, "r") as file:
-            for line in file:
-                word = line.strip()
-                attempts += 1
+    with open(wordlist, "r", errors="ignore") as file:
 
-                if salt:
-                    word_to_hash = salt + word
-                else:
-                    word_to_hash = word
+        for line in file:
 
-                if hash_type == "md5":
-                    hashed_word = hashlib.md5(word_to_hash.encode()).hexdigest()
-                elif hash_type == "sha256":
-                    hashed_word = hashlib.sha256(word_to_hash.encode()).hexdigest()
+            word = line.strip()
 
-                if hashed_word == target_hash:
-                    print("\n[+] Password Found!")
-                    print(f"    Password : {word}")
-                    print(f"    Attempts : {attempts}")
-                    found = True
-                    break
+            if not word:
+                continue
 
-        if not found:
-            print("\n[-] Password not found in wordlist.")
-            print(f"    Attempts tried : {attempts}")
+            attempts += 1
 
-    except Exception as e:
-        print(f"\n[-] Error: {e}")
-        sys.exit()
+            if hash_type == "md5":
+                hashed = hashlib.md5(word.encode()).hexdigest()
 
-    end_time = time.time()
-    print(f"\nTime Taken: {round(end_time - start_time, 3)} seconds")
+            elif hash_type == "sha256":
+                hashed = hashlib.sha256(word.encode()).hexdigest()
 
+            if attempts % 50 == 0:
+                print("Tried", attempts, "passwords...")
 
-def main():
-    parser = argparse.ArgumentParser(description="Mini Password Cracker (Dictionary Attack)")
+            if hashed == target_hash:
 
-    parser.add_argument("-t", "--target", required=True, help="Target hash value")
-    parser.add_argument("-ht", "--hashtype", required=True, choices=["md5", "sha256"], help="Hash type")
-    parser.add_argument("-w", "--wordlist", required=True, help="Wordlist file path")
-    parser.add_argument("-s", "--salt", help="Optional salt value")
+                end_time = time.time()
 
-    args = parser.parse_args()
+                print("\nPassword Found!")
+                print("Password :", word)
+                print("Attempts :", attempts)
+                print("Time Taken :", round(end_time-start_time,3), "seconds")
+                return
 
-    if not os.path.exists(args.wordlist):
-        print("[-] Wordlist file does not exist.")
-        sys.exit()
+    print("\nPassword not found in wordlist")
+    print("Attempts Tried :", attempts)
 
-    print("\nMini Password Cracker")
-    print("----------------------")
-    print(f"Target Hash : {args.target}")
-    print(f"Hash Type   : {args.hashtype}")
-    print(f"Wordlist    : {args.wordlist}")
-    if args.salt:
-        print(f"Salt        : {args.salt}")
-    print("----------------------")
-
-    crack_password(args.target, args.hashtype, args.wordlist, args.salt)
 
 
 if __name__ == "__main__":
-    main()
+
+    parser = argparse.ArgumentParser(
+        description="Mini Password Cracker"
+    )
+
+    parser.add_argument(
+        "-t",
+        required=True,
+        help="Target hash"
+    )
+
+    parser.add_argument(
+        "-ht",
+        required=True,
+        choices=["md5","sha256"],
+        help="Hash type"
+    )
+
+    parser.add_argument(
+        "-w",
+        required=True,
+        help="Wordlist file"
+    )
+
+    args = parser.parse_args()
+
+
+    if not os.path.exists(args.w):
+        print("Wordlist file not found")
+        exit()
+
+
+    print("\nMini Password Cracker")
+    print("------------------------")
+    print("Target Hash :", args.t)
+    print("Hash Type   :", args.ht)
+    print("Wordlist    :", args.w)
+    print("------------------------")
+
+
+    crack_password(
+        args.t,
+        args.ht,
+        args.w
+    )

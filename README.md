@@ -1,79 +1,87 @@
-Mini Password Cracker (Dictionary Attack)
+# Mini Password Cracker
 
-About This Project
-This is a simple Python-based password cracker that performs a dictionary attack on hashed passwords.
+This is a small Python project I made while learning basic offensive cybersecurity concepts.  
+The idea was to understand how a dictionary attack works by trying to crack hashed passwords using a wordlist.
 
-I built this project to understand:
+Instead of using tools like Hashcat directly, I wanted to first build a simple version myself and understand what happens behind the scenes.
 
-- How password hashing works
-- How attackers try to crack weak passwords
-- The importance of strong password policies
-- This tool is created strictly for educational and learning purposes.
-___________________________________________________________________________
+## Why I made this
+I built this mainly for practice and learning.
 
-Features
+Things I wanted to understand:
+- How password hashes are compared
+- How dictionary attacks work
+- Why weak passwords are dangerous
+- How to make a simple command-line security tool in Python
 
-- Supports MD5 and SHA256
-- Dictionary-based attack using custom wordlist
-- Tracks number of attempts
-- Shows time taken to crack
-- Command-line arguments using argparse
-___________________________________________________________________________
+## What it does
+Currently the script can:
 
-How it works
+- Crack MD5 and SHA256 hashes
+- Use a custom wordlist file
+- Count attempts
+- Show time taken
+- Take inputs using command-line arguments
 
-- User provides:
-- Target hash
-- Hash type (md5 / sha256)
-- Wordlist file
-- Program hashes each word in the wordlist.
-- Compares generated hash with target hash.
-- If matched → password found.
+## Run the tool
 
-___________________________________________________________________________
+```bash
+python cracker.py -t <hash> -ht md5 -w wordList.txt
+```
 
-How To Run
+Example:
 
-Basic syntax:
-
-python cracker.py -t <hash> -ht <hash_type> -w <wordlist>
-
-Example
+```bash
 python cracker.py -t 21232f297a57a5a743894a0e4a801fc3 -ht md5 -w wordList.txt
-___________________________________________________________________________
+```
 
-Example Output
+## Sample output
 
+```text
 Mini Password Cracker
 
 Target Hash : 21232f297a57a5a743894a0e4a801fc3
-Hash Type   : md5
-Wordlist    : wordList.txt
 
-[+] Password Found!
-    Password : admin
-    Attempts : 3
-Time Taken: 0.001 seconds
-___________________________________________________________________________
+[+] Password Found
+Password : admin
+Attempts : 3
+Time Taken : 0.001 seconds
+```
 
-Technologies Used
+## Screenshots
 
-- Python
+Successful crack:
+
+![Demo](screenshots/demo1.png)
+
+![Failure Demo](screenshots/demo2.png)
+
+## Files
+```text
+cracker.py
+README.md
+wordlists/
+screenshots/
+```
+
+## What I learned from building this
+This project helped me understand the logic behind password cracking instead of treating it like a black box.
+
+I also got practice with:
+- Python scripting
 - hashlib
 - argparse
-- Time module
-___________________________________________________________________________
+- Working with wordlists
+- Basic cybersecurity concepts
 
-What i learned
+## Things I want to improve later
+Some upgrades I may add:
 
-- How hashing algorithms work (MD5, SHA256)
-- How dictionary attacks are performed
-- Why weak passwords are dangerous
-- Basic command-line tool development
+- Multithreading
+- Larger wordlists
+- Rule-based mutations
+- Better terminal output
+- Support for more hash types
 
-___________________________________________________________________________
-
-Important Note
-
-This project is created only for learning cybersecurity concepts.
-It should not be used for illegal or unauthorized activities.
+## Note
+This project was made only for educational purposes and testing in authorized environments.
